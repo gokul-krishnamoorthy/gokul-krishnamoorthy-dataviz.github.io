@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+
+<html>
+
+<head>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="sample.css">
+</head>
+
+<body>
+    <div class="outer-wrapper">
+        <svg id="my-svg" width="1500" height="900"></svg>
+        <div id="title"></div>
+        <div class="switch-container">
+            <h2>Countries</h2>
+            <button class="cbtn dropbtn" onClick="switchData(1,'ind')">India</button>
+            <button class="cbtn dropbtn" onClick="switchData(1,'usa')">USA</button>
+            <button class="cbtn dropbtn" onClick="switchData(1,'brz')">Brazil</button>
+
+            <h2>Drill down data</h2>
+            <div class="dropdown">
+                <button id="all-dropdown" class="dropbtn">All</button>
+                <div class="dropdown-content">
+                    <a onClick="switchData(2,'ind')">India</a>
+                    <a onClick="switchData(2,'usa')">USA</a>
+                    <a onClick="switchData(2,'brz')">Brazil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">Narrative Visualisation project by - Gokul Krishnamoorthy</div>
+    <script src="sample.js"></script>
+</body>
+
+</html>
