@@ -6,6 +6,8 @@ var line, clip, brush;
 var idleTimeout;
 var tooltipFocus;
 var bisectDate, formatValue, dateFormatter;
+var currentIndex = 0;
+var country = "";
 
 // Features of the annotation
 var annotations = [
@@ -37,7 +39,7 @@ function createBaseGraph() {
     // set the dimensions and margins of the graph
     margin = { top: 10, right: 30, bottom: 30, left: 60 },
         width = 1500 - margin.left - margin.right,
-        height = 900 - margin.top - margin.bottom;
+        height = 850 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     svg = d3.select("#my-svg")
@@ -51,12 +53,43 @@ function createBaseGraph() {
 }
 
 function initGraph() {
+    currentIndex = 1;
     createBaseGraph();
     bindDataToGraph(1,"india.csv");
+    activateSlide();
     setTitle(1,"India");
 }
 
-function updateAnnotPosition(countryCode,data){
+function activateSlide(){
+    let activeElement = document.getElementById(currentIndex);
+    activeElement.classList.add("active");
+    for(let i=0;i<3;i++){
+        let btnIndex = i + 1;
+        if(currentIndex !== btnIndex){
+            let inactiveElement = document.getElementById(btnIndex);
+            inactiveElement.classList.remove("active");
+        }
+    }
+    handleNextPrev();
+}
+
+function handleNextPrev(){
+    let prevElement = document.getElementById('prev');
+    let nextElement = document.getElementById('next');
+    if(currentIndex === 1) {
+        prevElement.classList.add("inactive");
+        nextElement.classList.remove("inactive");
+    } else if(currentIndex === 3) {
+        nextElement.classList.add("inactive");
+        prevElement.classList.remove("inactive");
+    }
+    else{
+        prevElement.classList.remove("inactive");
+        nextElement.classList.remove("inactive");
+    }
+}
+
+function updateAnnotation(countryCode,data){
     let maxPoint = Math.max(...data.map(data => data.value));
     let position = { x: 0, y: 0, dy: 0, dx: 0 };
     switch (countryCode) {
@@ -96,8 +129,8 @@ function bindDataToGraph(visualType,fileName) {
             if(visualType === 1){
                 addTooltip(data);
                 animateLine();
+                annotations =  updateAnnotation(fileName,data);
                 setTimeout(() => {
-                    annotations =  updateAnnotPosition(fileName,data);
                     addAnnotations();
                 },1000);
             }
@@ -288,25 +321,37 @@ function updateChart() {
         )
 }
 
-function switchData(visualType,countryCode) {
+function switchData(visualType,slideVal) {
     clearGraph();
     createBaseGraph();
-    let country = "";
-    switch (countryCode) {
-        case 'ind':
+    switch (slideVal) {
+        case 'prev':
+            currentIndex = currentIndex != 1 ? currentIndex - 1 : currentIndex || 1;
+            switchData(visualType,currentIndex);
+            break;
+        case 1:
             country = "India";
             bindDataToGraph(visualType,'india.csv');
+            currentIndex = slideVal;
             break;
-        case 'usa':
+        case 2:
             country = "USA";
             bindDataToGraph(visualType,'usa.csv');
+            currentIndex = slideVal;
             break;
-        case 'brz':
+        case 3:
             country = "Brazil"
             bindDataToGraph(visualType,'brazil.csv');
+            currentIndex = slideVal;
+            break;
+        case 'next':
+            currentIndex = currentIndex != 3 ? currentIndex + 1 : currentIndex || 3;
+            switchData(visualType,currentIndex);
             break;
     }
     setTitle(visualType,country);
+    activateSlide();
+    handleDDStatus(visualType);
     if(visualType === 2){
         setDropdownSelect(country);
     }
@@ -321,6 +366,18 @@ function setTitle(visualType,data){
 function setDropdownSelect(data){
     let selectEl = document.getElementById("all-dropdown");
     selectEl.innerHTML = data;   
+}
+
+function handleDDStatus(visualType){
+    let allEl = document.getElementById("all-dropdown");
+    let selectEl = document.getElementById("dd-status");
+    selectEl.innerHTML = visualType === 1 ? 'Drilldown disabled' : 'Drilldown enabled  (Select the timeseries to zoom and double click to zoom out)';   
+    if(visualType === 2){
+        selectEl.classList.add('active');
+    }else{
+        selectEl.classList.remove('active');
+        allEl.innerHTML = 'Select here'
+    }
 }
 
 initGraph();

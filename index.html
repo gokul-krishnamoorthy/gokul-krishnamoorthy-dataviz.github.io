@@ -13,23 +13,29 @@
 
 <body>
     <div class="outer-wrapper">
-        <svg id="my-svg" width="1500" height="900"></svg>
+        <svg id="my-svg" width="1500" height="850"></svg>
         <div id="title"></div>
-        <div class="switch-container">
-            <h2>Countries</h2>
-            <button class="cbtn dropbtn" onClick="switchData(1,'ind')">India</button>
-            <button class="cbtn dropbtn" onClick="switchData(1,'usa')">USA</button>
-            <button class="cbtn dropbtn" onClick="switchData(1,'brz')">Brazil</button>
-
-            <h2>Drill down data</h2>
+        <div id="switch-drop" class="switch-container hide">
+            <h2>Enable Drill down for : </h2>
             <div class="dropdown">
-                <button id="all-dropdown" class="dropbtn">All</button>
+                <button id="all-dropdown" class="dropbtn">Select here</button>
                 <div class="dropdown-content">
-                    <a onClick="switchData(2,'ind')">India</a>
-                    <a onClick="switchData(2,'usa')">USA</a>
-                    <a onClick="switchData(2,'brz')">Brazil</a>
+                    <a onClick="switchData(2,1)">India</a>
+                    <a onClick="switchData(2,2)">USA</a>
+                    <a onClick="switchData(2,3)">Brazil</a>
                 </div>
             </div>
+            <h2 id="dd-status" class="drilldown-status">Drilldown disabled</h2>
+        </div>
+    </div>
+    <div class="slideshow-container">
+        <h2 class="country-title">Countries</h2>
+        <div class="slideshow-control">
+            <button class="cbtn dropbtn slider" id="prev" onClick="switchData(1,'prev')">&lt;&lt;</button>
+            <button class="cbtn dropbtn slider" id="1" onClick="switchData(1,1)">1</button>
+            <button class="cbtn dropbtn slider" id="2" onClick="switchData(1,2)">2</button>
+            <button class="cbtn dropbtn slider" id="3" onClick="switchData(1,3)">3</button>
+            <button class="cbtn dropbtn slider" id="next" onClick="switchData(1,'next')">&gt;&gt;</button>
         </div>
     </div>
     <div id="footer">Narrative Visualisation project by - Gokul Krishnamoorthy</div>
